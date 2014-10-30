@@ -1,0 +1,14 @@
+{
+  "name": "mocha-fengshui-reporter",
+  "version": "1.0.0",
+  "description": "Align your error reporting with universal principles.",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "dmf",
+  "license": "ISC",
+  "dependencies": {
+    "lodash": "^2.4.1"
+  }
+}
