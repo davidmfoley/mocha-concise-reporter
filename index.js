@@ -4,9 +4,16 @@ var fs = require('fs');
 var tty = require('tty');
 
 var colors = {
-  content: 93,
-  line: 94,
-  location: 91,
+  'local file': 93,
+  'local content': 36,
+  'local line': 94,
+  'local location': 91,
+  'local call': 91,
+  'nonlocal file': 90,
+  'nonlocal content': 90,
+  'nonlocal line': 90,
+  'nonlocal location': 90,
+  'nonlocal call': 90,
   fail: 31,
   pass: 32,
   name: 92,
@@ -60,49 +67,57 @@ function FengShuiReporter(runner) {
     var testLocation = failure.test.file;
     projectRoot = findProjectRoot(testLocation);
     var frames = failure.err.stack.split('\n');
-    var relevant = _.filter(frames, isLocal);
+    frames.shift();
 
     console.error(color('name', failure.test.fullTitle()));
 
     console.error('  ' + color('message', failure.err.message));
-    printStack(relevant);
-  }
-
-  function isLocal(frame) {
-    return frame.indexOf('/') > 0 && !/node\_modules/.test(frame);
+    printStack(frames);
   }
 
   function printStack(frames) {
+
     frames.forEach(printFrame);
   }
 
   function printFrame(frame) {
     var location = getFrameLocation(frame);
 
-    console.error(formatLocation(location));
+    var fmt = formatLocation(location);
+    if (fmt) {
+      console.error(fmt);
+    }
   }
 
   function getFrameLocation(frame) {
     var match = /\((.+)\)/.exec(frame);
+    var filename;
+    var call;
     if (!match) {
       var pieces = frame.trim().split(' ');
       if (pieces.length) {
-        return parseLocation(pieces[pieces.length - 1]);
+        filename = pieces[pieces.length - 1];
+        call = null;
       }
       else {
-        return frame;
+        return {raw: frame};
       }
     }
+    else {
+      filename = match[1];
+      var others = frame.substring(0, frame.indexOf('(')).trim().split(' ');
 
-    return parseLocation(match[1]);
-  }
+      call = others[others.length - 1];
+    }
 
-  function parseLocation(location) {
-    var pieces = location.split(':');
-    var absolute = pieces[0];
+    var namePieces = filename.split(':');
+    var absolute = namePieces[0];
     var relative = path.relative(projectRoot, absolute);
-    var line = pieces[1];
+    var line = namePieces[1];
+
     return {
+      call: call,
+      raw: frame,
       relative: relative,
       absolute: absolute,
       line: line,
@@ -122,7 +137,29 @@ function FengShuiReporter(runner) {
   }
 
   function formatLocation(location) {
-    return '    ' + color('file', location.relative) + ":" + color('line', location.line) + '\n      ' + color('content', location.content);
+    if (isMocha(location.absolute)) {
+      return;
+    }
+    var local = isLocal(location.absolute);
+
+    var prefix = local ? 'local ' : 'nonlocal ';
+
+    var message =  '    ' + color(prefix + 'file', location.relative) + ":" + color(prefix  + 'line', location.line);
+    if (location.call) {
+      message +=  ' - ' + color(prefix + 'call', location.call);
+    }
+    if (location.content) {
+      message += '\n      ' + color(prefix + 'content', location.content);
+    }
+    return message;
+  }
+
+  function isLocal(frame) {
+    return frame.indexOf('/') !== -1 && frame.indexOf('node_modules') === -1;
+  }
+
+  function isMocha(frame) {
+    return frame.indexOf('/mocha/') !== -1;
   }
 
   function readLine(file, line) {
@@ -131,7 +168,7 @@ function FengShuiReporter(runner) {
       return content[line - 1].trim();
     }
     catch(err) {
-      return '(could not read line)';
+      return null;
     }
   }
 
