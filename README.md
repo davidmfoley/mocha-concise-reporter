@@ -1,10 +1,9 @@
 ##Feng Shui Reporter for mocha
 
+A slimmed down reporter for mocha that prints USEFUL stack traces:
 
-A slimmed down reporter for mocha that:
-- colorizes the stack to highlight local (non-library) code
--
-
+* Focuses on code by hiding or deemphasizing stack frames in other modules or the mocha test framework itself
+* Displays the contents of the line of code referenced in each frame
 
 ###install it:
 
@@ -14,5 +13,12 @@ A slimmed down reporter for mocha that:
 
 ```./node_modules/.bin/mocha test -R mocha-fengshui-reporter ```
 
+###options
 
+Options are set via env variable:
 
+####MOCHA_FENGSHUI_MODE
+
+possible values: minimal, default
+
+```MOCHA_FENGSHUI_MODE=minimal ./node_modules/.bin/mocha test -R mocha-fengshui-reporter ```
