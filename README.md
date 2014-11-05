@@ -5,6 +5,8 @@ A slimmed down reporter for mocha that prints USEFUL stack traces:
 * Focuses on code by hiding or deemphasizing stack frames in other modules or the mocha test framework itself
 * Displays the contents of the line of code referenced in each frame
 
+(See below for examples of output)
+
 ###install it:
 
 ```npm install mocha-fengshui-reporter --save-dev```
@@ -13,12 +15,22 @@ A slimmed down reporter for mocha that prints USEFUL stack traces:
 
 ```./node_modules/.bin/mocha test -R mocha-fengshui-reporter ```
 
-###options
 
-Options are set via env variable:
+#### configuration
 
-####MOCHA_FENGSHUI_MODE
+The output mode for stack traces is set via env variable MOCHA_FENGSHUI_MODE
 
-possible values: minimal, default
+possible values: 
 
+* default - display (gray) stack frames from npm modules and node internals
+```./node_modules/.bin/mocha test -R mocha-fengshui-reporter ```
+
+* minimal - only display stack frames from the local module (just 'my code')
 ```MOCHA_FENGSHUI_MODE=minimal ./node_modules/.bin/mocha test -R mocha-fengshui-reporter ```
+
+####Example "minimal" output
+![Example Minimal](docs/minimal.png)
+
+####Example "default" output
+![Example Default](docs/default.png)
+
