@@ -8,8 +8,5 @@
   },
   "repository": "git://github.com/davidmfoley/mocha-fengshui-reporter",
   "author": "dmf",
-  "license": "ISC",
-  "dependencies": {
-    "lodash": "^2.4.1"
-  }
+  "license": "ISC"
 }
