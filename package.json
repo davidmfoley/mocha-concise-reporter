@@ -1,6 +1,6 @@
 {
   "name": "mocha-fengshui-reporter",
-  "version": "1.0.4",
+  "version": "1.0.5",
   "description": "Align your error reporting with universal principles.",
   "main": "index.js",
   "scripts": {
