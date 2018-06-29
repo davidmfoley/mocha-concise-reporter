@@ -1,14 +1,14 @@
 {
-  "name": "mocha-fengshui-reporter",
-  "version": "1.1.0",
-  "description": "Align your error reporting with universal principles.",
+  "name": "mocha-concise-reporter",
+  "version": "1.2.0",
+  "description": "Concise reporter for mocha",
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
-  "repository": "git://github.com/davidmfoley/mocha-fengshui-reporter",
+  "repository": "git://github.com/davidmfoley/mocha-concise-reporter",
   "author": "dmf",
-  "license": "ISC",
+  "license": "MIT",
   "dependencies": {
     "deep-diff": "^0.3.8"
   }
